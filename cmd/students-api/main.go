@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/sahasajib/students-api/internal/config"
-	"github.com/sahasajib/students-api/internal/config/http/handlers/student"
+	"github.com/sahasajib/students-api/internal/http/handlers/student"
 )
 
 
@@ -23,7 +23,7 @@ func main() {
 
 	//setup router and server
 	router := http.NewServeMux()
-	router.HandleFunc("POST /api/students", student.New())
+	router.HandleFunc("/api/students", student.New())
 
 	server := http.Server{
 		Addr: cfg.HTTPServer.Address,
