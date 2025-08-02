@@ -9,6 +9,12 @@ import (
 	"github.com/sahasajib/students-api/internal/types"
 )
 
+func handleCors(w http.ResponseWriter){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+	w.Header().Set("Access-Control_Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+}
 
 func HanleOpt(w http.ResponseWriter, r *http.Request){
 	if r.Method == "OPTIONS"{
@@ -29,6 +35,7 @@ var studentList[] types.Student
 func New() http.HandlerFunc{
 	return func (w http.ResponseWriter, r *http.Request) {
 		// Handler logic to get students
+		handleCors(w)
 		HanleOpt(w, r)
 		
 		if r.Method != "POST" {
@@ -44,7 +51,7 @@ func New() http.HandlerFunc{
 			http.Error(w, "Invalid request payload", http.StatusBadRequest)
 			return
 		}
-		newStudent.ID =  len(studentList) + 1
+		newStudent.ID =  int64(len(studentList) + 1)
 		studentList = append(studentList, newStudent)
 	
 		if err := validator.New().Struct(newStudent)

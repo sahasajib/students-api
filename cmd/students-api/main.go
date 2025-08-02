@@ -13,6 +13,7 @@ import (
 
 	"github.com/sahasajib/students-api/internal/config"
 	"github.com/sahasajib/students-api/internal/http/handlers/student"
+	"github.com/sahasajib/students-api/internal/storage/sqlite"
 )
 
 
@@ -20,6 +21,14 @@ import (
 func main() {
 	// Load the configuration
 	cfg := config.MustLoad()
+
+	// Database initialization
+	_, err := sqlite.New(cfg)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		slog.Info("Storage initalized")
+	}
 
 	//setup router and server
 	router := http.NewServeMux()
@@ -48,9 +57,10 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 6 * time.Second)
 	defer cancel()
 
-	err := server.Shutdown(ctx) 
+	err = server.Shutdown(ctx) 
 		if err != nil {
 			slog.Error("Failed to shutdown server", slog.String("error", err.Error()))
-		}
-	slog.Info("Server stopped gracefully") 
+		} else{
+			slog.Info("Server stopped gracefully")
+		} 
 }
