@@ -12,12 +12,10 @@ import (
 	"time"
 
 	"github.com/sahasajib/students-api/internal/config"
+	"github.com/sahasajib/students-api/internal/config/http/handlers/student"
 )
 
-func getStudents(w http.ResponseWriter, r *http.Request) {
-	// Handler logic to get students
-	w.Write([]byte("List of students"))
-}
+
 
 func main() {
 	// Load the configuration
@@ -25,7 +23,7 @@ func main() {
 
 	//setup router and server
 	router := http.NewServeMux()
-	router.HandleFunc("GET /", getStudents)
+	router.HandleFunc("POST /api/students", student.New())
 
 	server := http.Server{
 		Addr: cfg.HTTPServer.Address,
